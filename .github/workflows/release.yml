@@ -39,7 +39,7 @@ jobs:
                 go-mod-
       - run: go mod tidy
 
-      - run: make all -j 3
+      - run: make all -j 3 && zip -r xairline.zip dist/xairline
 
       - name: Release
         uses: softprops/action-gh-release@v1
@@ -47,8 +47,5 @@ jobs:
         with:
           body_path: ${{ github.workspace }}/CHANGELOG.md
           files: |
-            dist/executables/*.exe
-            dist/executables/*.dmg
-            dist/executables/*.deb
-            dist/executables/*.rpm
+            xairline.zip
           prerelease: true
