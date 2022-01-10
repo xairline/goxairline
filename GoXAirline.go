@@ -37,15 +37,9 @@ var myMenuId menus.MenuID
 func onPluginStart() {
 	logging.Info("Plugin started")
 
-	menuId := menus.FindPluginsMenu()
-	menuContainerId := menus.AppendMenuItem(menuId, "TestPlugin Menu", nil, false)
-	myMenuId = menus.CreateMenu("TestPlugin Menu", menuId, menuContainerId, menuHandler, nil)
-	menus.AppendMenuItem(myMenuId, "TestPlugin Menu sub 1", "TestPlugin Menu sub 1", false)
-	menus.AppendMenuItem(myMenuId, "TestPlugin Menu sub 2", "TestPlugin Menu sub 2", false)
-
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
-		logging.Info("Plugin started")
+		logging.Info("ping")
 		c.JSON(200, gin.H{
 			"message": "pong",
 		})
@@ -55,12 +49,8 @@ func onPluginStart() {
 	processing.RegisterFlightLoopCallback(flightLoop, 0.03, nil)
 }
 
-func menuHandler(menuRef, itemRef interface{}) {
-	logging.Infof("clicked: %+v", itemRef)
-}
-
 func flightLoop(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop float32, counter int, ref interface{}) float32 {
-	logging.Infof("Flight loop:%f", elapsedSinceLastCall)
+	logging.Debugf("Flight loop:%f", elapsedSinceLastCall)
 	return 0.03
 }
 
