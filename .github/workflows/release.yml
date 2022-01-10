@@ -31,10 +31,15 @@ jobs:
       - run: brew install FiloSottile/musl-cross/musl-cross
       - run: brew install mingw-w64
 
-      - run: mv dist/executables/*.exe dist/executables/ZonExecutive.exe
-      - run: mv dist/executables/*.dmg dist/executables/ZonExecutive.dmg
-      - run: mv dist/executables/*.deb dist/executables/ZonExecutive.deb
-      - run: mv dist/executables/*.rpm dist/executables/ZonExecutive.rpm
+      - uses: actions/cache@v2
+        with:
+            path: ~/go/pkg/mod
+            key: go-mod-${{ hashFiles('**/go.sum') }}
+            restore-keys: |
+                go-mod-
+      - run: go mod tidy
+
+      - run: make all -j 3
 
       - name: Release
         uses: softprops/action-gh-release@v1
