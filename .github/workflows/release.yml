@@ -39,7 +39,7 @@ jobs:
                 go-mod-
       - run: go mod tidy
 
-      - run: make all -j 3 && zip -r xairline.zip dist/xairline
+      - run: make all -j 3 && mv dist/xairline xairline && zip -r xairline.zip xairline
 
       - name: Release
         uses: softprops/action-gh-release@v1
