@@ -8,6 +8,8 @@ import (
 	"github.com/xairline/goplane/xplm/processing"
 )
 
+const POLL_FEQ = 20
+
 func main() {
 }
 
@@ -46,12 +48,12 @@ func onPluginStart() {
 	})
 	go r.Run(":8080")
 
-	processing.RegisterFlightLoopCallback(flightLoop, 0.03, nil)
+	processing.RegisterFlightLoopCallback(flightLoop, 1/POLL_FEQ, nil)
 }
 
 func flightLoop(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop float32, counter int, ref interface{}) float32 {
 	logging.Debugf("Flight loop:%f", elapsedSinceLastCall)
-	return 0.03
+	return 1 / POLL_FEQ
 }
 
 func onPluginStop() {
