@@ -6,16 +6,37 @@ import (
 )
 
 type DataRefExt struct {
+	name        string
 	dataref     dataAccess.DataRef
 	datarefType dataAccess.DataRefType
 	value       interface{}
 }
 
-func (datarefExt DataRefExt) GetStoredValue() interface{} {
+type FindDataRef func(dataRefName string) (dataAccess.DataRef, bool)
+type Logger func(format string, a ...interface{})
+
+func NewDataRefExt(name, datarefStr string, datarefType dataAccess.DataRefType, findDataRef FindDataRef, logger Logger) *DataRefExt {
+	// allow mock
+	if findDataRef == nil {
+		findDataRef = dataAccess.FindDataRef
+	}
+	if logger == nil {
+		logger = logging.Errorf
+	}
+
+	myDataref, success := findDataRef(datarefStr)
+	if !success {
+		logger("Failed to FindDataRef: %s", datarefStr)
+		return nil
+	}
+	return &DataRefExt{name: name, dataref: myDataref, datarefType: datarefType}
+}
+
+func (datarefExt *DataRefExt) GetStoredValue() interface{} {
 	return datarefExt.value
 }
 
-func (datarefExt DataRefExt) GetCurrentValue() interface{} {
+func (datarefExt *DataRefExt) GetCurrentValue() interface{} {
 	var currentValue interface{}
 	switch datarefExt.datarefType {
 	case dataAccess.TypeInt:

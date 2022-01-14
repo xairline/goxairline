@@ -39,6 +39,8 @@ jobs:
                 go-mod-
       - run: go mod tidy
 
+      - run: make mac-test
+
       - run: make all -j 3 && mv dist/xairline xairline && zip -r xairline.zip xairline
 
       - name: Release

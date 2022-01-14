@@ -37,3 +37,10 @@ lin:
 	go build -buildmode c-shared -o dist/xairline/lin.xpl GoXAirline.go
 
 all: mac win lin
+mac-test:
+	GOOS=darwin \
+	GOARCH=amd64 \
+	CGO_ENABLED=1 \
+	CGO_CFLAGS="-DAPL=1 -DIBM=0 -DLIN=0" \
+	CGO_LDFLAGS="-F/System/Library/Frameworks/ -F${CURDIR}/Libraries/Mac -framework XPLM" \
+	go test ./...
