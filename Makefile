@@ -44,4 +44,4 @@ mac-test:
 	CGO_ENABLED=1 \
 	CGO_CFLAGS="-DAPL=1 -DIBM=0 -DLIN=0" \
 	CGO_LDFLAGS="-F/System/Library/Frameworks/ -F${CURDIR}/Libraries/Mac -framework XPLM" \
-	go test ./... -v
+	go test -race -coverprofile=coverage.txt -covermode=atomic ./... -v

@@ -5,16 +5,6 @@ import (
 	"github.com/xairline/goplane/xplm/dataAccess"
 )
 
-type DataRefExt struct {
-	name        string
-	dataref     dataAccess.DataRef
-	datarefType dataAccess.DataRefType
-	value       interface{}
-}
-
-type FindDataRef func(dataRefName string) (dataAccess.DataRef, bool)
-type Logger func(format string, a ...interface{})
-
 func NewDataRefExt(name, datarefStr string, datarefType dataAccess.DataRefType, findDataRef FindDataRef, logger Logger) *DataRefExt {
 	// allow mock
 	if findDataRef == nil {
@@ -30,6 +20,14 @@ func NewDataRefExt(name, datarefStr string, datarefType dataAccess.DataRefType, 
 		return nil
 	}
 	return &DataRefExt{name: name, dataref: myDataref, datarefType: datarefType}
+}
+
+func (datarefExt *DataRefExt) GetName() string {
+	return datarefExt.name
+}
+
+func (datarefExt *DataRefExt) GetDatarefType() dataAccess.DataRefType {
+	return datarefExt.datarefType
 }
 
 func (datarefExt *DataRefExt) GetStoredValue() interface{} {

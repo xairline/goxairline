@@ -3,9 +3,8 @@ name: CI
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches:
-      - "main"
+  pull_request:
+    branches: [ main ]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -39,5 +38,7 @@ jobs:
       - run: go mod tidy
 
       - run: make mac-test
+
+      - run: bash <(curl -s https://codecov.io/bash)
 
       - run: make all -j 3 && mv dist/xairline xairline
