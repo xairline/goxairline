@@ -38,9 +38,10 @@ lin:
 
 all: mac win lin
 mac-test:
+	sudo ln -s ${CURDIR}/Libraries/Mac/XPLM.framework /Library/Frameworks/XPLM.framework && \
 	GOOS=darwin \
 	GOARCH=amd64 \
 	CGO_ENABLED=1 \
 	CGO_CFLAGS="-DAPL=1 -DIBM=0 -DLIN=0" \
 	CGO_LDFLAGS="-F/System/Library/Frameworks/ -F${CURDIR}/Libraries/Mac -framework XPLM" \
-	go test ./...
+	go test ./... -v
