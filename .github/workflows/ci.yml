@@ -39,4 +39,6 @@ jobs:
 
       - run: make mac-test
 
+      - run: bash <(curl -s https://codecov.io/bash)
+
       - run: make all -j 3 && mv dist/xairline xairline
