@@ -5,6 +5,7 @@ package xplane
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
 	"github.com/xairline/goplane/xplm/dataAccess"
 )
 
@@ -31,4 +32,13 @@ func TestNewDataRefExt(t *testing.T) {
 			t.Fatalf("Output %q not equal to expected %v", tmp, test.expected)
 		}
 	}
+}
+
+func TestNewDataRefExt_Getter(t *testing.T) {
+	tmp := NewDataRefExt("test", "test", dataAccess.TypeDouble, func(datarefStr string) (dataAccess.DataRef, bool) {
+		var res dataAccess.DataRef
+		return res, true
+	}, t.Logf)
+	assert.Equal(t, tmp.GetName(), "test")
+	assert.Equal(t, tmp.GetDatarefType(), dataAccess.TypeDouble)
 }

@@ -32,6 +32,14 @@ func NewDataRefExt(name, datarefStr string, datarefType dataAccess.DataRefType, 
 	return &DataRefExt{name: name, dataref: myDataref, datarefType: datarefType}
 }
 
+func (datarefExt *DataRefExt) GetName() string {
+	return datarefExt.name
+}
+
+func (datarefExt *DataRefExt) GetDatarefType() dataAccess.DataRefType {
+	return datarefExt.datarefType
+}
+
 func (datarefExt *DataRefExt) GetStoredValue() interface{} {
 	return datarefExt.value
 }
