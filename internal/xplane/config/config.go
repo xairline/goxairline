@@ -1,12 +1,18 @@
 package config
 
-import "github.com/xairline/goplane/extra/logging"
+import (
+	"io/ioutil"
+	"xairline/goxairline/internal/xplane/shared"
+
+	"github.com/xairline/goplane/extra/logging"
+	"gopkg.in/yaml.v2"
+)
 
 func NewConfig(configFile string) *Config {
 	var res Config
 	var err error
 
-	res.DatarefConfig, err = getDatarefConfig(configFile)
+	res.DatarefConfig, err = getDatarefConfig(configFile, nil)
 	if err != nil {
 		logging.Errorf("Failed to load dataref config: %s", configFile)
 		return nil
@@ -26,7 +32,19 @@ func getServerConfig(SERVER_URL string) (ServerConfig, error) {
 	return ServerConfig{}, nil
 }
 
-func getDatarefConfig(configFile string) (DatarefConfig, error) {
-	logging.Error("unimplemented")
-	return DatarefConfig{}, nil
+func getDatarefConfig(configFile string, logger shared.Logger) ([]DatarefConfig, error) {
+	var res []DatarefConfig
+	if logger == nil {
+		logger = logging.Errorf
+	}
+	yamlFile, err := ioutil.ReadFile(configFile)
+	if err != nil {
+		logger("Failed to get yaml file: %v", err)
+	}
+
+	err = yaml.Unmarshal(yamlFile, &res)
+	if err != nil {
+		logger("Unmarshal: %v", err)
+	}
+	return res, nil
 }

@@ -1,11 +1,13 @@
 package datarefext
 
 import (
+	"xairline/goxairline/internal/xplane/shared"
+
 	"github.com/xairline/goplane/extra/logging"
 	"github.com/xairline/goplane/xplm/dataAccess"
 )
 
-func NewDataRefExt(name, datarefStr string, datarefType dataAccess.DataRefType, findDataRef FindDataRef, logger Logger) *DataRefExt {
+func NewDataRefExt(name, datarefStr string, findDataRef FindDataRef, getDataRefType GetDatarefType, logger shared.Logger) *DataRefExt {
 	// allow mock
 	if findDataRef == nil {
 		findDataRef = dataAccess.FindDataRef
@@ -13,12 +15,17 @@ func NewDataRefExt(name, datarefStr string, datarefType dataAccess.DataRefType, 
 	if logger == nil {
 		logger = logging.Errorf
 	}
+	if getDataRefType == nil {
+		getDataRefType = dataAccess.GetDataRefTypes
+	}
 
 	myDataref, success := findDataRef(datarefStr)
 	if !success {
 		logger("Failed to FindDataRef: %s", datarefStr)
 		return nil
 	}
+
+	datarefType := getDataRefType(myDataref)
 	return &DataRefExt{name: name, dataref: myDataref, datarefType: datarefType}
 }
 

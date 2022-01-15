@@ -27,23 +27,22 @@ jobs:
 
       - uses: actions/setup-go@v2
         with:
-            go-version: "^1.17" # The Go version to download (if necessary) and use.
+          go-version: "^1.17" # The Go version to download (if necessary) and use.
       - run: brew install FiloSottile/musl-cross/musl-cross
       - run: brew install mingw-w64
 
       - uses: actions/cache@v2
         with:
-            path: ~/go/pkg/mod
-            key: go-mod-${{ hashFiles('**/go.sum') }}
-            restore-keys: |
-                go-mod-
+          path: ~/go/pkg/mod
+          key: go-mod-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            go-mod-
       - run: go mod tidy
-
       - run: make mac-test
 
       - run: bash <(curl -s https://codecov.io/bash)
 
-      - run: make all -j 3 && mv dist/xairline xairline && zip -r xairline.zip xairline
+      - run: make all -j 3 && mv dist/xairline xairline && cp internal/xplane/config/config.yaml dist/xairline/config.yaml && zip -r xairline.zip xairline
 
       - name: Release
         uses: softprops/action-gh-release@v1

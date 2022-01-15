@@ -1,14 +1,13 @@
 package config
 
 type DatarefConfig struct {
-	Name        string
-	DatarefStr  string
-	DatarefType string
+	Name       string `yaml:"name"`
+	DatarefStr string `yaml:"value"`
 }
 type ServerConfig struct{}
 
 type Config struct {
-	DatarefConfig DatarefConfig
+	DatarefConfig []DatarefConfig
 	ServerConfig  ServerConfig
 }
 
