@@ -1,4 +1,4 @@
-package xplane
+package datarefext
 
 import (
 	"github.com/xairline/goplane/extra/logging"

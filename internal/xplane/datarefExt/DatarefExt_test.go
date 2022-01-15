@@ -1,6 +1,6 @@
 //go:build darwin || freebsd || linux || netbsd || openbsd
 
-package xplane
+package datarefext
 
 import (
 	"testing"
