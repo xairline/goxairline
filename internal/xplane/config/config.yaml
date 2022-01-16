@@ -13,7 +13,7 @@
 - name: gs
   value: sim/flightmodel/position/groundspeed
 - name: n1
-  value: sim/cockpit2/engine/indicators/N1_percent[0]
+  value: sim/cockpit2/engine/indicators/N1_percent
 - name: pitch
   value: sim/flightmodel/position/theta
 - name: ias
