@@ -4,31 +4,30 @@ import (
 	"io/ioutil"
 	"xairline/goxairline/internal/xplane/shared"
 
-	"github.com/xairline/goplane/extra/logging"
 	"gopkg.in/yaml.v2"
 )
 
-func NewConfig(configFile string) *Config {
+func NewConfig(configFile string, logger *shared.Logger) *Config {
 	var res Config
 	var err error
 
-	res.DatarefConfig, err = getDatarefConfig(configFile, nil)
+	res.DatarefConfig, err = getDatarefConfig(configFile, logger)
 	if err != nil {
-		logging.Errorf("Failed to load dataref config: %s", configFile)
+		logger.Errorf("Failed to load dataref config: %s", configFile)
 		return nil
 	}
 
-	res.ServerConfig, err = getServerConfig(SERVER_URL)
+	res.ServerConfig, err = getServerConfig(SERVER_URL, logger)
 	if err != nil {
-		logging.Errorf("Failed to load dataref config: %s", configFile)
+		logger.Errorf("Failed to load dataref config: %s", configFile)
 		return nil
 	}
 
 	return &res
 }
 
-func getServerConfig(SERVER_URL string) (ServerConfig, error) {
-	logging.Error("unimplemented")
+func getServerConfig(SERVER_URL string, logger *shared.Logger) (ServerConfig, error) {
+	logger.Errorf("unimplemented")
 	return ServerConfig{}, nil
 }
 

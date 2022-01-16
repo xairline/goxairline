@@ -8,6 +8,7 @@ import (
 )
 
 func TestNewConfig(t *testing.T) {
+	path, _ := os.Getwd()
 	type args struct {
 		configFile string
 	}
@@ -16,11 +17,16 @@ func TestNewConfig(t *testing.T) {
 		args args
 		want *Config
 	}{
-		// TODO: Add test cases.
+		{
+			name: "should not load non-exist config file",
+			args: args{configFile: path + "/config.yaml2"},
+			want: nil,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := NewConfig(tt.args.configFile); !reflect.DeepEqual(got, tt.want) {
+			logger := shared.GetLoggerForTest(t)
+			if got := NewConfig(tt.args.configFile, &logger); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("NewConfig() = %v, want %v", got, tt.want)
 			}
 		})
@@ -37,11 +43,16 @@ func Test_getServerConfig(t *testing.T) {
 		want    ServerConfig
 		wantErr bool
 	}{
-		// TODO: Add test cases.
+		{
+			name:    "should load remote config file",
+			args:    args{SERVER_URL: "TBD"},
+			wantErr: false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := getServerConfig(tt.args.SERVER_URL)
+			logger := shared.GetLoggerForTest(t)
+			got, err := getServerConfig(tt.args.SERVER_URL, &logger)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("getServerConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -55,7 +66,6 @@ func Test_getServerConfig(t *testing.T) {
 
 func Test_getDatarefConfig(t *testing.T) {
 	path, _ := os.Getwd()
-	t.Logf("Current test filename: %s", path)
 	type args struct {
 		configFile string
 	}
