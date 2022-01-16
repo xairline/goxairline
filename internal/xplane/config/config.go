@@ -37,11 +37,13 @@ func getDatarefConfig(configFile string, logger *shared.Logger) ([]DatarefConfig
 	yamlFile, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		logger.Errorf("Failed to get yaml file: %v", err)
+		return nil, err
 	}
 
 	err = yaml.Unmarshal(yamlFile, &res)
 	if err != nil {
 		logger.Errorf("Unmarshal: %v", err)
+		return nil, err
 	}
 	logger.Infof("Get config object from file: %v", res)
 	return res, nil

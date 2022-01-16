@@ -66,8 +66,15 @@ func Test_getDatarefConfig(t *testing.T) {
 		wantErr bool
 	}{
 		{
-			name: "should load config file",
-			args: args{configFile: path + "/config.yaml"},
+			name:    "should load config file",
+			args:    args{configFile: path + "/config.yaml"},
+			wantErr: false,
+		},
+		{
+			name:    "should load config file that doesn't exist",
+			args:    args{configFile: path + "/config.yaml2"},
+			want:    nil,
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
@@ -78,8 +85,8 @@ func Test_getDatarefConfig(t *testing.T) {
 				t.Errorf("getDatarefConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if got == nil {
-				t.Errorf("getDatarefConfig failed, error: %+v", err)
+			if tt.want != nil && !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("getServerConfig() = %v, want %v", got, tt.want)
 			}
 		})
 	}
