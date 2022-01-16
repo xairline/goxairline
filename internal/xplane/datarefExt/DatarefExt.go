@@ -7,13 +7,14 @@ import (
 	"github.com/xairline/goplane/xplm/dataAccess"
 )
 
-func NewDataRefExt(name, datarefStr string, findDataRef FindDataRef, getDataRefType GetDatarefType, logger shared.Logger) *DataRefExt {
+func NewDataRefExt(name, datarefStr string, findDataRef FindDataRef, getDataRefType GetDatarefType, logger *shared.Logger) *DataRefExt {
 	// allow mock
 	if findDataRef == nil {
 		findDataRef = dataAccess.FindDataRef
 	}
 	if logger == nil {
-		logger = logging.Errorf
+		logger.Errorf = logging.Errorf
+		logger.Infof = logging.Infof
 	}
 	if getDataRefType == nil {
 		getDataRefType = dataAccess.GetDataRefTypes
@@ -21,7 +22,7 @@ func NewDataRefExt(name, datarefStr string, findDataRef FindDataRef, getDataRefT
 
 	myDataref, success := findDataRef(datarefStr)
 	if !success {
-		logger("Failed to FindDataRef: %s", datarefStr)
+		logger.Errorf("Failed to FindDataRef: %s", datarefStr)
 		return nil
 	}
 

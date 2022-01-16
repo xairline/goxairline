@@ -4,6 +4,7 @@ import (
 	"os"
 	"reflect"
 	"testing"
+	"xairline/goxairline/internal/xplane/shared"
 )
 
 func TestNewConfig(t *testing.T) {
@@ -71,13 +72,14 @@ func Test_getDatarefConfig(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got, err := getDatarefConfig(tt.args.configFile, t.Errorf)
+			logger := shared.GetLoggerForTest(t)
+			got, err := getDatarefConfig(tt.args.configFile, &logger)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("getDatarefConfig() error = %v, wantErr %v", err, tt.wantErr)
 				return
 			}
-			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("getDatarefConfig() = %v, want %v", got, tt.want)
+			if got == nil {
+				t.Errorf("getDatarefConfig failed, error: %+v", err)
 			}
 		})
 	}

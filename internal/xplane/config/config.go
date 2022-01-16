@@ -32,19 +32,21 @@ func getServerConfig(SERVER_URL string) (ServerConfig, error) {
 	return ServerConfig{}, nil
 }
 
-func getDatarefConfig(configFile string, logger shared.Logger) ([]DatarefConfig, error) {
+func getDatarefConfig(configFile string, logger *shared.Logger) ([]DatarefConfig, error) {
 	var res []DatarefConfig
 	if logger == nil {
-		logger = logging.Errorf
+		logger.Errorf = logging.Errorf
+		logger.Infof = logging.Infof
 	}
 	yamlFile, err := ioutil.ReadFile(configFile)
 	if err != nil {
-		logger("Failed to get yaml file: %v", err)
+		logger.Errorf("Failed to get yaml file: %v", err)
 	}
 
 	err = yaml.Unmarshal(yamlFile, &res)
 	if err != nil {
-		logger("Unmarshal: %v", err)
+		logger.Errorf("Unmarshal: %v", err)
 	}
+	logger.Infof("Get config object from file: %v", res)
 	return res, nil
 }

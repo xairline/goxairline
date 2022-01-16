@@ -1,3 +1,6 @@
 package shared
 
-type Logger func(format string, a ...interface{})
+type Logger struct {
+	Errorf func(format string, a ...interface{})
+	Infof  func(format string, a ...interface{})
+}
