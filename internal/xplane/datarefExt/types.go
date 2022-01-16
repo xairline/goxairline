@@ -1,4 +1,4 @@
-package xplane
+package datarefext
 
 import "github.com/xairline/goplane/xplm/dataAccess"
 
@@ -10,6 +10,6 @@ type DataRefExt struct {
 }
 
 type FindDataRef func(dataRefName string) (dataAccess.DataRef, bool)
-type Logger func(format string, a ...interface{})
+type GetDatarefType func(dataref dataAccess.DataRef) dataAccess.DataRefType
 
 type DataRefExtStore map[string]DataRefExt

@@ -1,24 +1,49 @@
 package main
 
 import (
+	"os"
+	"path/filepath"
+	"time"
+
 	"github.com/gin-gonic/gin"
+	"github.com/nakabonne/tstorage"
 	"github.com/xairline/goplane/extra"
 	"github.com/xairline/goplane/extra/logging"
-	"github.com/xairline/goplane/xplm/menus"
+	"github.com/xairline/goplane/xplm/plugins"
 	"github.com/xairline/goplane/xplm/processing"
+	"github.com/xairline/goplane/xplm/utilities"
 )
 
 const POLL_FEQ = 20
 
+var Plugin *extra.XPlanePlugin
+var Storage tstorage.Storage
+var tracking bool
+
 func main() {
 }
 
-var plugin *extra.XPlanePlugin
-
 func init() {
-	plugin = extra.NewPlugin("X Airline", "com.github.xairline.goxairline", "Native plugin for x airline")
-	plugin.SetPluginStateCallback(onPluginStateChanged)
+	Plugin = extra.NewPlugin("X Airline", "com.github.xairline.goxairline", "Native plugin for x airline")
+	Plugin.SetPluginStateCallback(onPluginStateChanged)
+	plugins.EnableFeature("XPLM_USE_NATIVE_PATHS", true)
 	logging.MinLevel = logging.Info_Level
+
+	// setup storage
+	var storageErr error
+	storageDuration, _ := time.ParseDuration("1h")
+	Storage, storageErr = tstorage.NewStorage(
+		tstorage.WithDataPath(os.Getenv("HOME")+"/.xiarline/data"),
+		tstorage.WithPartitionDuration(storageDuration),
+		tstorage.WithTimestampPrecision(tstorage.Milliseconds),
+	)
+	if storageErr != nil {
+		logging.Errorf("Failed initialize TS storage: %+v", storageErr)
+	}
+	logging.Infof("Initialized TS storage: %s", os.Getenv("HOME")+"/.xiarline/data")
+
+	tracking = false
+	logging.Infof("Set tracking to: %v", tracking)
 }
 
 func onPluginStateChanged(state extra.PluginState, plugin *extra.XPlanePlugin) {
@@ -34,10 +59,13 @@ func onPluginStateChanged(state extra.PluginState, plugin *extra.XPlanePlugin) {
 	}
 }
 
-var myMenuId menus.MenuID
-
 func onPluginStart() {
 	logging.Info("Plugin started")
+
+	// get plugin path
+	systemPath := utilities.GetSystemPath()
+	pluginPath := filepath.Join(systemPath, "Resources", "plugins", "xairline")
+	logging.Infof("Plugin path: %s", pluginPath)
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
@@ -57,7 +85,7 @@ func flightLoop(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop float32, co
 }
 
 func onPluginStop() {
-	menus.DestroyMenu(myMenuId)
+	defer Storage.Close()
 	logging.Info("Plugin stopped")
 }
 

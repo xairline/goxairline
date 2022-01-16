@@ -1,9 +1,10 @@
 //go:build darwin || freebsd || linux || netbsd || openbsd
 
-package xplane
+package datarefext
 
 import (
 	"testing"
+	"xairline/goxairline/internal/xplane/shared"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/xairline/goplane/xplm/dataAccess"
@@ -26,8 +27,9 @@ var testCases = []NewDataRefExtTestCases{
 }
 
 func TestNewDataRefExt(t *testing.T) {
+	logger := shared.GetLoggerForTest(t)
 	for _, test := range testCases {
-		tmp := NewDataRefExt("test", "test", dataAccess.TypeDouble, test.mockFindDataref, t.Logf)
+		tmp := NewDataRefExt("test", "test", test.mockFindDataref, func(dataref dataAccess.DataRef) dataAccess.DataRefType { return dataAccess.TypeDouble  }, &logger)
 		if (tmp == nil) != test.expected {
 			t.Fatalf("Output %q not equal to expected %v", tmp, test.expected)
 		}
@@ -35,10 +37,13 @@ func TestNewDataRefExt(t *testing.T) {
 }
 
 func TestNewDataRefExt_Getter(t *testing.T) {
-	tmp := NewDataRefExt("test", "test", dataAccess.TypeDouble, func(datarefStr string) (dataAccess.DataRef, bool) {
+	logger := shared.GetLoggerForTest(t)
+	tmp := NewDataRefExt("test", "test", func(datarefStr string) (dataAccess.DataRef, bool) {
 		var res dataAccess.DataRef
 		return res, true
-	}, t.Logf)
+	}, func(dataref dataAccess.DataRef) dataAccess.DataRefType {
+		return dataAccess.TypeDouble
+	}, &logger)
 	assert.Equal(t, tmp.GetName(), "test")
 	assert.Equal(t, tmp.GetDatarefType(), dataAccess.TypeDouble)
 }
