@@ -18,9 +18,17 @@ func TestNewConfig(t *testing.T) {
 		want *Config
 	}{
 		{
-			name: "should not load non-exist config file",
-			args: args{configFile: path + "/config.yaml2"},
-			want: nil,
+			name: "should load config file",
+			args: args{configFile: path + "/_test_/valid_config.yaml"},
+			want: &Config{
+				DatarefConfig: []DatarefConfig{
+					{Name: "tas", DatarefStr: "sim/cockpit2/gauges/indicators/true_airspeed_kts_pilot"},
+				},
+			},
+		},
+		{
+			name: "should load invalid config file",
+			args: args{configFile: path + "/_test_/invalid_config.yaml"},
 		},
 	}
 	for _, tt := range tests {
@@ -83,6 +91,12 @@ func Test_getDatarefConfig(t *testing.T) {
 		{
 			name:    "should load config file that doesn't exist",
 			args:    args{configFile: path + "/config.yaml2"},
+			want:    nil,
+			wantErr: true,
+		},
+		{
+			name:    "should load config file that doesn't exist",
+			args:    args{configFile: path + "/_test_/invalid_config.yaml"},
 			want:    nil,
 			wantErr: true,
 		},
