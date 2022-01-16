@@ -8,18 +8,6 @@ import (
 )
 
 func NewDataRefExt(name, datarefStr string, findDataRef FindDataRef, getDataRefType GetDatarefType, logger *shared.Logger) *DataRefExt {
-	// allow mock
-	if findDataRef == nil {
-		findDataRef = dataAccess.FindDataRef
-	}
-	if logger == nil {
-		logger.Errorf = logging.Errorf
-		logger.Infof = logging.Infof
-	}
-	if getDataRefType == nil {
-		getDataRefType = dataAccess.GetDataRefTypes
-	}
-
 	myDataref, success := findDataRef(datarefStr)
 	if !success {
 		logger.Errorf("Failed to FindDataRef: %s", datarefStr)

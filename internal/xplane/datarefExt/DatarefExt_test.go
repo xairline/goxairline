@@ -29,7 +29,7 @@ var testCases = []NewDataRefExtTestCases{
 func TestNewDataRefExt(t *testing.T) {
 	logger := shared.GetLoggerForTest(t)
 	for _, test := range testCases {
-		tmp := NewDataRefExt("test", "test", test.mockFindDataref, nil, &logger)
+		tmp := NewDataRefExt("test", "test", test.mockFindDataref, func(dataref dataAccess.DataRef) dataAccess.DataRefType { return dataAccess.TypeDouble  }, &logger)
 		if (tmp == nil) != test.expected {
 			t.Fatalf("Output %q not equal to expected %v", tmp, test.expected)
 		}
