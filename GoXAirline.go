@@ -2,13 +2,16 @@ package main
 
 import (
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nakabonne/tstorage"
 	"github.com/xairline/goplane/extra"
 	"github.com/xairline/goplane/extra/logging"
+	"github.com/xairline/goplane/xplm/plugins"
 	"github.com/xairline/goplane/xplm/processing"
+	"github.com/xairline/goplane/xplm/utilities"
 )
 
 const POLL_FEQ = 20
@@ -23,6 +26,7 @@ func main() {
 func init() {
 	Plugin = extra.NewPlugin("X Airline", "com.github.xairline.goxairline", "Native plugin for x airline")
 	Plugin.SetPluginStateCallback(onPluginStateChanged)
+	plugins.EnableFeature("XPLM_USE_NATIVE_PATHS", true)
 	logging.MinLevel = logging.Info_Level
 
 	// setup storage
@@ -57,6 +61,11 @@ func onPluginStateChanged(state extra.PluginState, plugin *extra.XPlanePlugin) {
 
 func onPluginStart() {
 	logging.Info("Plugin started")
+
+	// get plugin path
+	systemPath := utilities.GetSystemPath()
+	pluginPath := filepath.Join(systemPath, "Resources", "plugins", "xairline")
+	logging.Infof("Plugin path: %s", pluginPath)
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
