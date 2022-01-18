@@ -26,6 +26,7 @@
   value: sim/network/misc/network_time_sec
 - name: icao
   value: sim/aircraft/view/acf_ICAO
+  isBytesArray: true
 - name: fuel_weight
   value: sim/flightmodel/weight/m_fuel_total
 - name: total_weight

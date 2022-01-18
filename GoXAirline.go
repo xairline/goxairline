@@ -23,7 +23,7 @@ const PollFeq = 20
 var Plugin *extra.XPlanePlugin
 var Storage tstorage.Storage
 var tracking bool
-var datarefList datarefext.DataRefExtStore = make(datarefext.DataRefExtStore)
+var datarefList []datarefext.DataRefExt
 
 func main() {
 }
@@ -81,14 +81,17 @@ func onPluginStart() {
 	config := config.NewConfig(filepath.Join(pluginPath, "config.yaml"), &logger)
 	// create dataref listeners
 	for _, dataref := range config.DatarefConfig {
-		datarefList[dataref.Name] = *datarefext.NewDataRefExt(
+		datarefList = append(datarefList, *datarefext.NewDataRefExt(
 			dataref.Name,
 			dataref.DatarefStr,
 			dataAccess.FindDataRef,
 			dataAccess.GetDataRefTypes,
 			&logger,
-		)
+		))
 	}
+
+	// running data processing pipeline in background
+	go xplane.GlobalDatarefStore.ProcessFromGlobalDatarefStore(&logger)
 
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
@@ -105,6 +108,15 @@ func onPluginStart() {
 func flightLoop(elapsedSinceLastCall, elapsedTimeSinceLastFlightLoop float32, counter int, ref interface{}) float32 {
 	logging.Debugf("Flight loop:%f", elapsedSinceLastCall)
 	return 1 / PollFeq
+	datarefElement := map[string]interface{}{}
+	for _, dataref := range datarefList {
+		datarefElement[dataref.GetName()] = dataref.GetCurrentValue()
+	}
+	xplane.GlobalDatarefStore = append(xplane.GlobalDatarefStore, datarefElement)
+	if len(xplane.GlobalDatarefStore)%1000 == 0 {
+		logging.Infof("%v", xplane.GlobalDatarefStore[len(xplane.GlobalDatarefStore)-1])
+	}
+	return -1 //every frame
 }
 
 func onPluginStop() {

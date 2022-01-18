@@ -11,5 +11,3 @@ type DataRefExt struct {
 
 type FindDataRef func(dataRefName string) (dataAccess.DataRef, bool)
 type GetDatarefType func(dataref dataAccess.DataRef) dataAccess.DataRefType
-
-type DataRefExtStore map[string]DataRefExt
