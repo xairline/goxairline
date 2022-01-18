@@ -84,6 +84,8 @@ func onPluginStart() {
 		datarefList = append(datarefList, *datarefext.NewDataRefExt(
 			dataref.Name,
 			dataref.DatarefStr,
+			int8(dataref.Precision),
+			dataref.IsBytesArray,
 			dataAccess.FindDataRef,
 			dataAccess.GetDataRefTypes,
 			&logger,
