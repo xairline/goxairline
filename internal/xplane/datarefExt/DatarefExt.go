@@ -15,6 +15,11 @@ func NewDataRefExt(name, datarefStr string, findDataRef FindDataRef, getDataRefT
 	}
 
 	datarefType := getDataRefType(myDataref)
+	// handle multiple data type
+	if datarefType == 6 {
+		datarefType = dataAccess.TypeDouble
+	}
+
 	return &DataRefExt{name: name, dataref: myDataref, datarefType: datarefType}
 }
 
