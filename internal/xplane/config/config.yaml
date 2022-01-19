@@ -28,10 +28,10 @@
   precision: 1
 - name: lat
   value: sim/flightmodel/position/latitude
+  precision: -1
 - name: lng
   value: sim/flightmodel/position/longitude
-# - name: ts
-#   value: sim/network/misc/network_time_sec
+  precision: -1
 - name: icao
   value: sim/aircraft/view/acf_ICAO
   isBytesArray: true

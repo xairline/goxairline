@@ -102,6 +102,10 @@ func onPluginStart() {
 			"message": "pong",
 		})
 	})
+	r.GET("/dataref", func(c *gin.Context) {
+		logging.Info("ping")
+		c.JSON(200, xplane.GlobalDatarefStore[len(xplane.GlobalDatarefStore)-1])
+	})
 	go r.Run(":8080")
 
 	processing.RegisterFlightLoopCallback(flightLoop, 1/PollFeq, nil)
