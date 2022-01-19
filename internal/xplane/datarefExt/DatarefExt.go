@@ -33,10 +33,6 @@ func (datarefExt *DataRefExt) GetDatarefType() dataAccess.DataRefType {
 	return datarefExt.datarefType
 }
 
-func (datarefExt *DataRefExt) GetStoredValue() interface{} {
-	return datarefExt.value
-}
-
 func (datarefExt *DataRefExt) GetCurrentValue() interface{} {
 	var currentValue interface{}
 	switch datarefExt.datarefType {
@@ -86,7 +82,6 @@ func (datarefExt *DataRefExt) GetCurrentValue() interface{} {
 		logging.Infof("Unknown dataref type for %+v", datarefExt)
 		return nil
 	}
-	datarefExt.value = currentValue
 	return currentValue
 }
 
