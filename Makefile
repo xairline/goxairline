@@ -18,7 +18,7 @@ dev:
 	CGO_CFLAGS="-DAPL=1 -DIBM=0 -DLIN=0" \
 	CGO_LDFLAGS="-F/System/Library/Frameworks/ -F${CURDIR}/Libraries/Mac -framework XPLM" \
 	go build -buildmode c-shared -o ~/X-Plane\ 11/Resources/plugins/xairline/mac.xpl GoXAirline.go && \
-	cp internal/xplane/config/config.yaml ~/X-Plane\ 11/Resources/plugins/xairline/config.yaml
+	cp internal/xplane/config/config.yaml ~/X-Plane\ 12/Resources/plugins/xairline/config.yaml
 win:
 	CGO_CFLAGS="-DIBM=1 -static" \
 	CGO_LDFLAGS="-L${CURDIR}/Libraries/Win -lXPLM_64 -static-libgcc -static-libstdc++ -Wl,--exclude-libs,ALL" \
