@@ -17,7 +17,7 @@ func NewConfig(configFile string, logger *shared.Logger) *Config {
 		return nil
 	}
 
-	res.ServerConfig, err = getServerConfig(SERVER_URL, logger)
+	res.ServerConfig, err = getServerConfig(ServerUrl, logger)
 	if err != nil {
 		logger.Errorf("Failed to load dataref config: %s", configFile)
 		return nil

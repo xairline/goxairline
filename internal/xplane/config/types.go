@@ -11,4 +11,4 @@ type Config struct {
 	ServerConfig  ServerConfig
 }
 
-const SERVER_URL = "https://api.xairline.org"
+const ServerUrl = "https://api.xairline.org"
