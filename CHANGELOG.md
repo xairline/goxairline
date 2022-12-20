@@ -2,6 +2,12 @@
 ## [Unreleased]
 
 
+<a name="v0.2.4"></a>
+## [v0.2.4] - 2022-12-20
+### Fix
+- IDE errors
+
+
 <a name="v0.2.3"></a>
 ## [v0.2.3] - 2022-12-20
 
@@ -43,7 +49,8 @@
 <a name="ls"></a>
 ## ls - 2022-01-10
 
-[Unreleased]: https://github.com/xairline/goxairline/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/xairline/goxairline/compare/v0.2.4...HEAD
+[v0.2.4]: https://github.com/xairline/goxairline/compare/v0.2.3...v0.2.4
 [v0.2.3]: https://github.com/xairline/goxairline/compare/v0.2.2...v0.2.3
 [v0.2.2]: https://github.com/xairline/goxairline/compare/v0.2.1...v0.2.2
 [v0.2.1]: https://github.com/xairline/goxairline/compare/v0.0.0-development.1...v0.2.1
